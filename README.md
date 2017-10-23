@@ -16,3 +16,6 @@ Slowly turning into an all-in-one Boggle utility
 - Dictionary
 - Board generator using default Boggle distribution
 - Board solver (fairly efficient, takes about 3 seconds)
+
+# Changeloggle
+- 10/23 Initial commit, with board generator and solver
