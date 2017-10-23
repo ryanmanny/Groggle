@@ -3,7 +3,7 @@ Boggle clone with custom boards, custom board sizes (eventually), automatic boar
 Slowly turning into an all-in-one Boggle utility
 
 # TODO
-- Find new allowed Boggle words list (Alternatively, remove crummy words like roman numerals and words with apostrophes)
+- Find new allowed Boggle words list (or remove crummy words like roman numerals and words with apostrophes)
 - Add actual game functionality
 - Add rules
 - Input custom boards
