@@ -9,10 +9,11 @@
 #include <stdexcept> //for trying to catch the exception that stoi throws :(
 #include <random> //random generator and distribution
 #include <chrono> //seeding random
+#include <algorithm>
 
 #include "extraFunctions.h"
 
-#define wordfile "boggle.txt"
+#define wordfile "cleanBoggle.txt"
 #define boardHeight 4
 #define boardWidth 4
 #define boardSize boardHeight * boardWidth
@@ -23,7 +24,7 @@
 #define space " | "
 #define qSpace "| "
 
-#define timeStart(); clock_t start = clock();
+#define timeStart(); clock_t start = clock(); //only call once
 #define timeStop(); clock_t end = clock(); cout << double(end - start) / CLOCKS_PER_SEC << " seconds" << endl;
 
 using namespace std;
@@ -78,7 +79,7 @@ public:
 	Board(const string & filename)
 	{
 		ifstream file(filename);
-		
+
 		*this = Board(file); //I cannot believe this works
 	}
 	Board(ifstream & file)
@@ -209,7 +210,7 @@ private:
 				s += 'u'; //adds the bonus u attached to qs
 			//nullboard stops recursion from using a letter more than once
 			nullBoard[i][j] = true;
-			
+
 			//if the word is in the wordList hash table, add it to the newWords list
 			if (words.has(s))
 			{
@@ -223,7 +224,7 @@ private:
 			for (int k = i - 1; k <= i + 1; k++)
 			for (int l = j - 1; l <= j + 1; l++)
 			if (k >= 0 && k < boardHeight && l >= 0 && l < boardWidth && nullBoard[k][l] == false) //don't do recursive calls unless we have to
-				findWordsFromPos(nullBoard, k, l, s, words); 
+				findWordsFromPos(nullBoard, k, l, s, words);
 
 			//backs up a letter to go somewhere else
 			s.erase(s.length() - 1);

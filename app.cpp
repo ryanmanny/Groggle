@@ -2,13 +2,14 @@
 
 void Groggle::runApp(void)
 {
+	//removed system() calls to prepare for port to curses
+
 	string s;
 	int choice;
 	//menu
 	while (true)
 	{
 		do {
-			system("cls"); //find portable version
 			cout << "BOGGLE START PLAYING YA GUNKUS" << endl;
 			cout << "1) play" << endl;
 			cout << "2) the rules if I ever add them" << endl;
@@ -30,10 +31,8 @@ void Groggle::runApp(void)
 		case 2: //the rules
 			break;
 		case 3:
-			system("cls");
 			randomizeBoard();
 			printBoard();
-			system("pause");
 			break;
 		case 4:
 			return;
@@ -51,5 +50,4 @@ void Groggle::playGame(void)
 	timeStart();
 	this->board.findWords(this->words);
 	timeStop();
-	system("pause");
 }
