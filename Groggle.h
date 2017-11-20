@@ -9,25 +9,31 @@
 #include <stdexcept> //for trying to catch the exception that stoi throws :(
 #include <random> //random generator and distribution
 #include <chrono> //seeding random
+#include <curses.h>
 #include <algorithm>
 
-#include "extraFunctions.h"
+//#include "extraFunctions.h"
 
-#define wordfile "cleanBoggle.txt"
+#define wordfile "cleanBoggle.txt" //removed the apostrophe words
 #define boardHeight 4
 #define boardWidth 4
 #define boardSize boardHeight * boardWidth
 #define dieSides 6
 #define SHORT 6
 
+#define FILEMODE 0
+#define STRINGMODE 1
+
 #define lineBreak " -----------------"
 #define space " | "
 #define qSpace "| "
 
-#define timeStart(); clock_t start = clock(); //only call once
+#define timeStart(); clock_t start = clock();
 #define timeStop(); clock_t end = clock(); cout << double(end - start) / CLOCKS_PER_SEC << " seconds" << endl;
 
 using namespace std;
+
+void cleanDictionary(void);
 
 class Groggle;
 class WordList;
@@ -53,9 +59,32 @@ public:
 	{
 		auto it = words.find(s);
 		//if the word is in there return true
-		if (it != words.end())
+		if (it != words.end()) //hash iterators freak me out
 			return true;
 		else return false;
+	}
+	bool add(string s)
+	{
+		cout << s << endl;
+		for (string::size_type i = 0; i < s.length(); i++)
+		{
+			s.at(i) = tolower(s.at(i));
+			cout << s << endl;
+		}
+		//uses same process as the words constructor
+		if (!has(s))
+		{
+			words.insert(pair<string, bool>(s, true));
+			cout << s << " was inserted successfully!" << endl;
+			s = s.substr(0, SHORT);
+			words_short.insert(pair<string, bool>(s, true));
+			return true; //returns true on success
+		}
+		else
+		{
+			cout << s << " is already in the list!" << endl;
+			return false;
+		}
 	}
 
 	//really good idea speeds up the runtime by 100fold
@@ -76,11 +105,32 @@ class Board
 {
 public:
 	//file constructors for debugging the word finder
-	Board(const string & filename)
+	Board(const string & s, const int & mode = FILEMODE) //combo string constructor and file constructor
 	{
-		ifstream file(filename);
+		if (mode == FILEMODE)
+		{
+			ifstream file(s);
+			*this = Board(file); //I cannot believe this works
+		}
+		else if (mode == STRINGMODE)
+		{
+			*this = Board(); //default constructor
 
-		*this = Board(file); //I cannot believe this works
+							 //must be the proper length if not the program would be dunksis
+			if (s.size() == boardSize) //this should be a member of the board, not #defined
+			{
+				//technically these can be numbers or whitespace but if they want a nasty board so bad let em have it
+				for (int i = 0; i < boardWidth; i++)
+					for (int j = 0; j < boardHeight; j++)
+						board[i][j] = s.at(i*boardWidth + j);
+			}
+			else
+			{
+				//just give them a random board
+				cout << "Wrong number of letters, randomizing board" << endl;
+				this->randomize();
+			}
+		}
 	}
 	Board(ifstream & file)
 	{
@@ -122,6 +172,11 @@ public:
 		dice[13] = { 't', 'o', 'e', 's', 's', 'i' };
 		dice[14] = { 't', 'e', 'r', 'w', 'h', 'v' };
 		dice[15] = { 'n', 'u', 'i', 'h', 'm', 'q' };
+	}
+
+	vector<string> getFoundWords(void) //returns copy of foundWords
+	{
+		return foundWords;
 	}
 
 	void randomize(void)
