@@ -9,7 +9,6 @@ void Groggle::runApp(void)
 	while (true)
 	{
 		do {
-			system("cls"); //find portable version
 			cout << "BOGGLE START PLAYING YA GUNKUS" << endl;
 			cout << "1) play" << endl;
 			cout << "2) the rules if I ever add them" << endl;
@@ -34,13 +33,10 @@ void Groggle::runApp(void)
 		case 2: //the rules
 			break;
 		case 3:
-			system("cls");
 			randomizeBoard();
 			printBoard();
-			system("pause");
 			break;
 		case 4:
-			system("cls");
 			cout << "Type a word to find in the dictionary: " << endl;
 			cin >> s;
 			if (words.has(s))
@@ -55,20 +51,16 @@ void Groggle::runApp(void)
 				if (c == 'y' || c == 'Y')
 					words.add(s);
 			}
-			system("pause");
 			break;
 		case 5:
-			system("cls");
 			cout << "Type in the letters of the board in the order they appear:" << endl;
 			cin >> s;
 			board = Board(s, STRINGMODE);
 			board.findWords(words);
 		case 6:
-			system("cls");
 			cout << "Type your custom word:" << endl;
 			cin >> s;
 			words.add(s);
-			system("pause");
 			break;
 		case 7:
 			return;
@@ -86,7 +78,6 @@ void Groggle::playGame(void)
 	timeStart();
 	this->board.findWords(this->words);
 	timeStop();
-	system("pause");
 }
 
 //the dictionary I downloaded was a pile
