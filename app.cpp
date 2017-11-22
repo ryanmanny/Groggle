@@ -57,6 +57,7 @@ void Groggle::runApp(void)
 			cin >> s;
 			board = Board(s, STRINGMODE);
 			board.findWords(words);
+			break;
 		case 6:
 			cout << "Type your custom word:" << endl;
 			cin >> s;
@@ -77,6 +78,8 @@ void Groggle::playGame(void)
 	//times findWords function
 	timeStart();
 	this->board.findWords(this->words);
+	this->board.sortWords();
+	this->board.printWords();
 	timeStop();
 }
 

@@ -104,6 +104,34 @@ private:
 class Board
 {
 public:
+	Board() : dist_board(0, boardSize - 1) ,  dist_side(0, dieSides - 1)//inits board
+	{
+		//chrono usage from cplusplus
+		rand.seed((unsigned int)chrono::system_clock::now().time_since_epoch().count());
+
+		for (int i = 0; i < boardHeight; i++)
+		for (int j = 0; j < boardWidth ; j++)
+			board[i][j] = ' ';
+
+		//initializes all the dice. MIGHT be a better way to do this
+		dice[0] = { 'a', 'e', 'a', 'n', 'e', 'g' };
+		dice[1] = { 'a', 'h', 's', 'p', 'c', 'o' };
+		dice[2] = { 'a', 's', 'p', 'f', 'f', 'k' };
+		dice[3] = { 'o', 'b', 'j', 'o', 'a', 'b' };
+		dice[4] = { 'i', 'o', 't', 'm', 'u', 'c' };
+		dice[5] = { 'r', 'y', 'v', 'd', 'e', 'l' };
+		dice[6] = { 'l', 'r', 'e', 'i', 'x', 'd' };
+		dice[7] = { 'e', 'i', 'u', 'n', 'e', 's' };
+		dice[8] = { 'w', 'n', 'g', 'e', 'e', 'h' };
+		dice[9] = { 'l', 'n', 'h', 'n', 'r', 'z' };
+		dice[10] = { 't', 's', 't', 'i', 'y', 'd' };
+		dice[11] = { 'o', 'w', 't', 'o', 'a', 't' };
+		dice[12] = { 'e', 'r', 't', 't', 'y', 'l' };
+		dice[13] = { 't', 'o', 'e', 's', 's', 'i' };
+		dice[14] = { 't', 'e', 'r', 'w', 'h', 'v' };
+		dice[15] = { 'n', 'u', 'i', 'h', 'm', 'q' };
+	}
+
 	//file constructors for debugging the word finder
 	Board(const string & s, const int & mode = FILEMODE) //combo string constructor and file constructor
 	{
@@ -142,36 +170,6 @@ public:
 			file >> c;
 			board[i][j] = c;
 		}
-	}
-	Board() //inits board
-	{
-		//chrono usage from cplusplus
-		rand.seed((unsigned int)chrono::system_clock::now().time_since_epoch().count());
-
-		dist_side  = uniform_int_distribution<int>(0, dieSides  - 1);
-		dist_board = uniform_int_distribution<int>(0, boardSize - 1);
-
-		for (int i = 0; i < boardHeight; i++)
-		for (int j = 0; j < boardWidth ; j++)
-			board[i][j] = ' ';
-
-		//initializes all the dice. MIGHT be a better way to do this
-		dice[0] = { 'a', 'e', 'a', 'n', 'e', 'g' };
-		dice[1] = { 'a', 'h', 's', 'p', 'c', 'o' };
-		dice[2] = { 'a', 's', 'p', 'f', 'f', 'k' };
-		dice[3] = { 'o', 'b', 'j', 'o', 'a', 'b' };
-		dice[4] = { 'i', 'o', 't', 'm', 'u', 'c' };
-		dice[5] = { 'r', 'y', 'v', 'd', 'e', 'l' };
-		dice[6] = { 'l', 'r', 'e', 'i', 'x', 'd' };
-		dice[7] = { 'e', 'i', 'u', 'n', 'e', 's' };
-		dice[8] = { 'w', 'n', 'g', 'e', 'e', 'h' };
-		dice[9] = { 'l', 'n', 'h', 'n', 'r', 'z' };
-		dice[10] = { 't', 's', 't', 'i', 'y', 'd' };
-		dice[11] = { 'o', 'w', 't', 'o', 'a', 't' };
-		dice[12] = { 'e', 'r', 't', 't', 'y', 'l' };
-		dice[13] = { 't', 'o', 'e', 's', 's', 'i' };
-		dice[14] = { 't', 'e', 'r', 'w', 'h', 'v' };
-		dice[15] = { 'n', 'u', 'i', 'h', 'm', 'q' };
 	}
 
 	vector<string> getFoundWords(void) //returns copy of foundWords
@@ -238,11 +236,28 @@ public:
 			findWordsFromPos(nullBoard, i, j, s, words);
 		}
 		//all strings found, let's print them
+		// for (string word : foundWords)
+		// 	cout << word << endl;
+		// cout << "Number of words found: " << foundWords.size() << endl;
+
+		return foundWords;
+	}
+
+	//sort words from longest to shortest
+	void sortWords()
+	{
+		std::sort(foundWords.begin(), foundWords.end(), [] (const string &lhs, const string &rhs)
+		{
+			return lhs.length() > rhs.length();
+		});
+	}
+
+	//precondition: words must be found first
+	void printWords()
+	{
 		for (string word : foundWords)
 			cout << word << endl;
 		cout << "Number of words found: " << foundWords.size() << endl;
-
-		return foundWords;
 	}
 private:
 	char board[boardHeight][boardWidth];
@@ -270,7 +285,7 @@ private:
 			if (words.has(s))
 			{
 				//cout << s << endl;
-				if (find(foundWords.begin(), foundWords.end(), s) == foundWords.end())
+				if (s.length() >= 3 && find(foundWords.begin(), foundWords.end(), s) == foundWords.end() )
 					foundWords.push_back(s);
 			}
 
