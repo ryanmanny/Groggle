@@ -6,6 +6,7 @@ GPP     = g++
 CFLAGS  = -g -Wall -std=c++11
 RM      = rm -f
 BINNAME = groggle
+SOURCE  = Board/*.cpp Groggle/*.cpp main.cpp
 
 # Shell gives make a full user environment
 SHELL := /bin/bash
@@ -20,8 +21,8 @@ all: build
 
 # build depends upon *.cpp, then runs the command:
 #  g++ -g -std=c++0x -o bigFiveList
-build: *.cpp
-	$(GPP) $(CFLAGS) -o $(BINNAME) *.cpp
+build: $(SOURCE)
+	$(GPP) $(CFLAGS) -o $(BINNAME) $(SOURCE)
 
 run: build
 	./$(BINNAME)

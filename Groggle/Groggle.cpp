@@ -1,5 +1,10 @@
 #include "Groggle.h"
 
+Groggle::Groggle() : words(), board()
+{
+
+}
+
 void Groggle::runApp(void)
 {
 	string s;
@@ -10,13 +15,13 @@ void Groggle::runApp(void)
 	{
 		do {
 			cout << "BOGGLE START PLAYING YA GUNKUS" << endl;
-			cout << "1) play" << endl;
-			cout << "2) the rules if I ever add them" << endl;
-			cout << "3) generate board for pen and paper" << endl;
-			cout << "4) search for a word in the dictionary" << endl;
-			cout << "5) solve an existing board" << endl;
-			cout << "6) insert a custom word into the dictionary" << endl;
-			cout << "7) exit" << endl;
+			cout << "1) Play" << endl;
+			cout << "2) Boggle Rules" << endl;
+			cout << "3) Generate Board" << endl;
+			cout << "4) Solve Board" << endl;
+			cout << "5) Dictionary Search" << endl;
+			cout << "6) Dictionary Insert" << endl;
+			cout << "7) Exit" << endl;
 			cout << "Enter your choice: ";
 			cin >> s;
 			try { choice = stoi(s); } //still crashes when you type garbage fix this
@@ -37,6 +42,14 @@ void Groggle::runApp(void)
 			printBoard();
 			break;
 		case 4:
+			cout << "Type in the letters of the board in the order they appear:" << endl;
+			cin >> s;
+			board = Board(s, STRINGMODE);
+			board.findWords(words);
+			board.sortWords();
+			board.printWords();
+			break;
+		case 5:
 			cout << "Type a word to find in the dictionary: " << endl;
 			cin >> s;
 			if (words.has(s))
@@ -52,12 +65,6 @@ void Groggle::runApp(void)
 					words.add(s);
 			}
 			break;
-		case 5:
-			cout << "Type in the letters of the board in the order they appear:" << endl;
-			cin >> s;
-			board = Board(s, STRINGMODE);
-			board.findWords(words);
-			break;
 		case 6:
 			cout << "Type your custom word:" << endl;
 			cin >> s;
@@ -72,8 +79,8 @@ void Groggle::runApp(void)
 
 void Groggle::playGame(void)
 {
-	//randomizeBoard();
-	loadBoard();
+	randomizeBoard();
+	//loadBoard();
 	printBoard();
 	//times findWords function
 	timeStart();
@@ -105,10 +112,10 @@ void cleanDictionary(void)
 	}
 } //now just need to get rid of all those stupid roman numerals
 
-void clearScreen(void) //won't need this with curses
-{
-	for (int i = 0; i < 10; i++)
-	{
-		cout << "\n\n\n\n\n\n\n\n\n\n" << endl;
-	}
-}
+// void clearScreen(void) //won't need this with curses
+// {
+// 	for (int i = 0; i < 10; i++)
+// 	{
+// 		cout << "\n\n\n\n\n\n\n\n\n\n" << endl;
+// 	}
+// }
