@@ -44,7 +44,7 @@ void Groggle::runApp(void)
 		case 4:
 			cout << "Type in the letters of the board in the order they appear:" << endl;
 			cin >> s;
-			board = Board(s, STRINGMODE);
+			board = Board(s, loadMode::STRINGMODE);
 			board.findWords(words);
 			board.sortWords();
 			board.printWords();

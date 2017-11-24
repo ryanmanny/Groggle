@@ -11,16 +11,16 @@ Board::Board() : dist_board(0, boardSize - 1) ,  dist_side(0, dieSides - 1)//ini
 		board[i][j] = ' ';
 
 	//initializes all the dice. MIGHT be a better way to do this
-	dice[0] = { 'a', 'e', 'a', 'n', 'e', 'g' };
-	dice[1] = { 'a', 'h', 's', 'p', 'c', 'o' };
-	dice[2] = { 'a', 's', 'p', 'f', 'f', 'k' };
-	dice[3] = { 'o', 'b', 'j', 'o', 'a', 'b' };
-	dice[4] = { 'i', 'o', 't', 'm', 'u', 'c' };
-	dice[5] = { 'r', 'y', 'v', 'd', 'e', 'l' };
-	dice[6] = { 'l', 'r', 'e', 'i', 'x', 'd' };
-	dice[7] = { 'e', 'i', 'u', 'n', 'e', 's' };
-	dice[8] = { 'w', 'n', 'g', 'e', 'e', 'h' };
-	dice[9] = { 'l', 'n', 'h', 'n', 'r', 'z' };
+	dice[0]  = { 'a', 'e', 'a', 'n', 'e', 'g' };
+	dice[1]  = { 'a', 'h', 's', 'p', 'c', 'o' };
+	dice[2]  = { 'a', 's', 'p', 'f', 'f', 'k' };
+	dice[3]  = { 'o', 'b', 'j', 'o', 'a', 'b' };
+	dice[4]  = { 'i', 'o', 't', 'm', 'u', 'c' };
+	dice[5]  = { 'r', 'y', 'v', 'd', 'e', 'l' };
+	dice[6]  = { 'l', 'r', 'e', 'i', 'x', 'd' };
+	dice[7]  = { 'e', 'i', 'u', 'n', 'e', 's' };
+	dice[8]  = { 'w', 'n', 'g', 'e', 'e', 'h' };
+	dice[9]  = { 'l', 'n', 'h', 'n', 'r', 'z' };
 	dice[10] = { 't', 's', 't', 'i', 'y', 'd' };
 	dice[11] = { 'o', 'w', 't', 'o', 'a', 't' };
 	dice[12] = { 'e', 'r', 't', 't', 'y', 'l' };
