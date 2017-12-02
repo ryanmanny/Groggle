@@ -1,6 +1,7 @@
 #include "Board.h"
 
-Board::Board(const int newBoardWidth, const int newBoardHeight) : dist_board(0, (newBoardWidth * newBoardHeight) - 1) ,  dist_side(0, DIESIDES - 1)//inits board
+Board::Board(const int newBoardWidth, const int newBoardHeight) : dist_board(0, (newBoardWidth * newBoardHeight) - 1) , dist_side(0, DIESIDES - 1) , dist_letters(0.0, 100.0) ,//Inits board 
+likelihoods{ 8.12, 1.49, 2.71, 4.32, 12.02, 2.30, 2.03, 5.92, 7.31, .10, .69, 3.98, 2.61, 6.95, 7.68, 1.82, .11, 6.02, 6.28, 9.10, 2.88, 1.11, 2.09, .17, 2.11, .07 }
 {
 	//Chrono usage from cplusplus
 	rand.seed((int) std::chrono::system_clock::now().time_since_epoch().count());
@@ -77,7 +78,7 @@ void Board::resizeBoard(const int newBoardWidth, const int newBoardHeight)
 	board.resize(newBoardHeight);
 
 	//Resizes every row in the board
-	for (int i = 0; i < newBoardHeight; i++)
+	for (int i = 0; i < newBoardWidth; i++)
 	{
 		board.at(i).resize(newBoardWidth);
 	}
@@ -153,9 +154,21 @@ void Board::resetDice(void)
 		dice[24] = { 'o', 'o', 'o', 't', 't', 'u'};
 	}
 	//Calculated distribution
+	//Actually generates a set of die instead of just plastering the board with a good distribution of letters. This one may be dangerous
 	else
 	{
+		//A way of triggering the board randomizer to just randomize the board
+		//dice[0] = { '0','0','0','0','0','0' };
 
+		//Is & the way to do this?
+		for (array<char, 6> & die : dice)
+		{
+			for (int i = 0; i < DIESIDES; i++)
+			{
+				//We'll see if this works
+				die.at(i) = getLetter(dist_letters(rand));
+			}
+		}
 	}
 }
 
@@ -304,7 +317,10 @@ void Board::findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, cons
 		{
 			//cout << s << endl;
 			if (s.length() >= 3 && find(foundWords.begin(), foundWords.end(), s) == foundWords.end() )
+			{
+				//cout << s << endl;
 				foundWords.push_back(s);
+			}
 		}
 
 		//Recursion time - moves to all 9 surrounding letters
@@ -326,4 +342,23 @@ void Board::findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, cons
 		nullBoard[i][j] = false;
 	}
 	else return;
+}
+
+//Precondition: takes a random number from 0.0 to 100.0 and returns a character based on letter distribition
+//I should probably write good test code for this function, although if generates all letters and not just 'a' or 'z' it's probably right
+char Board::getLetter(double randNum)
+{
+	double distribution = 0.0;
+	char c = 'z';
+	//Pretty cool alogithm if I do say so myself. Adds number frequencies in order until it hits the number passed in, then returns the corresponding character
+	//Should return a 1:1 distribution of the English letters
+	for (c = 'a'; c <= 'z' && distribution < randNum; c++)
+	{
+		//Likelihoods is a member 
+		distribution += likelihoods[c - 'a'];
+	}
+	return c;
+
+	//The only problem with this method is caused by 'Q' having 'u' built into it, which disproportionately increases the likelihood of 'u' appearing
+	//Solutions? Figure out later
 }

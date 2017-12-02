@@ -72,6 +72,14 @@ public:
 	void sortWords();
 	void printWords();
 private:
+	//FUNCTIONS:
+	//void findWordsFromPos(bool nullBoard[boardHeight][boardWidth], const int & i, const int & j, string & s, const WordList & words);
+	void findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, const int j, string & s, const WordList & words);
+
+	//Precondition: Takes a double number between 0.0 and 100.0 and generates a letter based on English letter distribution
+	char getLetter(double randNum);
+
+	//DATA:
 	int boardWidth;
 	int boardHeight;
 
@@ -84,9 +92,11 @@ private:
 	vector<string> foundWords;
 	
 	std::default_random_engine rand; //rand objects
-	std::uniform_int_distribution<int> dist_board;
-	std::uniform_int_distribution<int> dist_side;
+	std::uniform_int_distribution<int>     dist_board;
+	std::uniform_int_distribution<int>     dist_side;
+	std::uniform_real_distribution<double> dist_letters;
 
-	//void findWordsFromPos(bool nullBoard[boardHeight][boardWidth], const int & i, const int & j, string & s, const WordList & words);
-	void findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, const int j, string & s, const WordList & words);
+	//Letter dist from http://www.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
+	//Likelihoods stores all distribution values in order. Used by getLetter
+	double likelihoods[26];
 };

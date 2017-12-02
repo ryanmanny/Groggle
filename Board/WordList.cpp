@@ -44,14 +44,14 @@ bool WordList::add(string & s)
 	{
 		s.at(i) = tolower(s.at(i));
 	}
-	//uses same process as the words constructor
+	//Uses same process as the words constructor
 	if (!has(s))
 	{
 		words.insert(pair<string, bool>(s, true));
 		cout << s << " was inserted successfully!" << endl;
 		s = s.substr(0, SHORT);
 		words_short.insert(pair<string, bool>(s, true));
-		return true; //returns true on success
+		return true; //Returns true on success
 	}
 	else
 	{
@@ -60,8 +60,9 @@ bool WordList::add(string & s)
 	}
 }
 
-//really good idea speeds up the runtime by 100fold
-//returns false if there is no word longer than 7 characters along the current path
+//Really good idea speeds up the runtime by an order of magnitude
+//Returns false if there is no word longer than SHORT characters along the current path
+//Turns N! Factorialish behavior into N! divided by something probably
 bool WordList::shortCircuit(const string & s) const
 {
 	auto it = words_short.find(s.substr(0, SHORT));

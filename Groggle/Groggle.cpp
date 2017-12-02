@@ -11,7 +11,7 @@ void Groggle::runApp(void)
 	char c;
 	int choice;
 
-	int newWidth = 0, newHeight = 0;
+	int newDim = 0;
 
 	//Default Board
 	board = Board(4,4);
@@ -76,12 +76,10 @@ void Groggle::runApp(void)
 			words.add(s);
 			break;
 		case 7:
-			cout << "Enter new number of rows    : ";
-			cin >> newHeight;
-			cout << "Enter new number of columns : ";
-			cin >> newWidth;
-			board.resizeBoard(newWidth, newHeight);
-			cout << "Board resized to " << std::to_string(newWidth) << " x " << std::to_string(newHeight) << endl;
+			cout << "Enter new board dimension (NxN): ";
+			cin >> newDim;
+			board.resizeBoard(newDim, newDim);
+			cout << "Board resized to " << std::to_string(newDim) << " x " << std::to_string(newDim) << endl;
 			break;
 		case 8:
 			return;
