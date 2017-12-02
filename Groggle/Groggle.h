@@ -40,7 +40,7 @@ public:
 	}
 	void loadBoard(void)
 	{
-		board = Board("exampleboard.txt");
+		board = Board(4,4,"exampleboard.txt");
 	}
 private:
 	WordList words;

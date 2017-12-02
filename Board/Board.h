@@ -3,6 +3,7 @@
 #include <string>
 #include <ctype.h> //toupper()
 #include <vector>
+#include <array>
 #include <map> //hash table for words
 #include <stdexcept> //for trying to catch the exception that stoi throws :(
 #include <random> //random generator and distribution
@@ -10,11 +11,9 @@
 #include <curses.h>
 #include <algorithm>
 
-#define boardHeight 4
-#define boardWidth 4
-#define boardSize boardHeight * boardWidth
-#define dieSides 6
-#define SHORT 6
+#define BOARDSIZE boardHeight * boardWidth
+#define DIESIDES 6
+#define SHORT 6 //This is SLOW for the 5x5 boards. Find deterministic way to find better SHORT
 
 enum loadMode
 {
@@ -27,14 +26,15 @@ using std::endl; //remove these two when curses added
 using std::map;
 using std::string;
 using std::vector;
+using std::array;
 using std::ifstream;
 using std::pair;
 
-#define lineBreak " -----------------"
+#define lineBreak  "----"
 #define space " | "
 #define qSpace "| "
 
-//contains every word in English languages in hash table for fast lookup
+//Contains every word in English languages in hash table for fast lookup
 class WordList
 {
 public:
@@ -44,18 +44,26 @@ public:
 	bool add(string & s);
 	bool shortCircuit(const string & s) const;
 private:
-	map<string, bool> words; //hash table for instant searching
+	//Hash table for instant lookup - TODO: Find out if an unsorted map would be better
+	map<string, bool> words; 
+	//Abridged version of hash table for short circuiting board paths... really speeds up searchtimes
 	map<string, bool> words_short;
 };
 
 class Board
 {
 public:
-	Board();
-	Board(const string & s, const loadMode & mode = loadMode::FILEMODE);
-	Board(ifstream & file);
+	Board(const int newBoardWidth, const int newBoardHeight);
+	Board(const int newBoardWidth, const int newBoardHeight, const string & s, const loadMode & mode = loadMode::FILEMODE);
+	~Board();
 
-	vector<string> getFoundWords(void); //returns copy of foundWords
+	bool setBoard(const string & s);
+	void resizeBoard(const int newBoardWidth, const int newBoardHeight);
+	void resetDice(void);
+
+	//Returns copy of foundWords... fairly BIG memory
+	//If I allocated foundWords on the heap I could pass back a reference or pointer... hmmm
+	vector<string> getFoundWords(void); 
 
 	void print(void);
 	void randomize(void);
@@ -64,14 +72,21 @@ public:
 	void sortWords();
 	void printWords();
 private:
-	char board[boardHeight][boardWidth];
-	vector<char> dice[boardSize]; //find out why array didn't work here because that will use less memory
+	int boardWidth;
+	int boardHeight;
 
+	//2D Vector to hold the board
+	vector<vector<char>> board;
+	//Vector of char arrays to hold the dice
+	vector<array<char, DIESIDES>> dice;
+
+	//Vector of strings to hold all valid words in the board
 	vector<string> foundWords;
 	
 	std::default_random_engine rand; //rand objects
 	std::uniform_int_distribution<int> dist_board;
 	std::uniform_int_distribution<int> dist_side;
 
-	void findWordsFromPos(bool nullBoard[boardHeight][boardWidth], const int & i, const int & j, string & s, const WordList & words);
+	//void findWordsFromPos(bool nullBoard[boardHeight][boardWidth], const int & i, const int & j, string & s, const WordList & words);
+	void findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, const int j, string & s, const WordList & words);
 };

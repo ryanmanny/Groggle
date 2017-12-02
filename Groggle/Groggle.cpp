@@ -1,6 +1,6 @@
 #include "Groggle.h"
 
-Groggle::Groggle() : words(), board()
+Groggle::Groggle() : words(), board(4,4)
 {
 
 }
@@ -10,26 +10,30 @@ void Groggle::runApp(void)
 	string s;
 	char c;
 	int choice;
+
+	int newWidth = 0, newHeight = 0;
+
+	//Default Board
+	board = Board(4,4);
+
 	//menu
 	while (true)
-	{
-		do {
-			cout << "BOGGLE START PLAYING YA GUNKUS" << endl;
-			cout << "1) Play" << endl;
-			cout << "2) Boggle Rules" << endl;
-			cout << "3) Generate Board" << endl;
-			cout << "4) Solve Board" << endl;
-			cout << "5) Dictionary Search" << endl;
-			cout << "6) Dictionary Insert" << endl;
-			cout << "7) Exit" << endl;
-			cout << "Enter your choice: ";
-			cin >> s;
-			try { choice = stoi(s); } //still crashes when you type garbage fix this
-			catch (exception) {}
-		} while (choice < 1 || choice > 7);
+	{	
+		cout << "BOGGLE START PLAYING YA GUNKUS" << endl;
+		cout << "1) Play and Solve" << endl; //this will be different with curses
+		cout << "2) Boggle Rules" << endl;
+		cout << "3) Generate Board" << endl;
+		cout << "4) Solve Board" << endl;
+		cout << "5) Dictionary Search" << endl;
+		cout << "6) Dictionary Insert" << endl;
+		cout << "7) Resize Board" << endl;
+		cout << "8) Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> s;
+		try { choice = stoi(s); } //still crashes when you type garbage fix this
+		catch (exception) {}
 
-		//we now have a proper choice
-
+		//Use choice
 		switch (choice)
 		{
 		case 1: //the game
@@ -44,7 +48,8 @@ void Groggle::runApp(void)
 		case 4:
 			cout << "Type in the letters of the board in the order they appear:" << endl;
 			cin >> s;
-			board = Board(s, loadMode::STRINGMODE);
+			board.setBoard(s);
+			board.print();
 			board.findWords(words);
 			board.sortWords();
 			board.printWords();
@@ -54,7 +59,7 @@ void Groggle::runApp(void)
 			cin >> s;
 			if (words.has(s))
 			{
-				cout << s << " is an official Groggle word!" << endl;
+				cout << "Congrats, \"" << s << "\" is an official Groggle word!" << endl;
 			}
 			else
 			{
@@ -71,7 +76,18 @@ void Groggle::runApp(void)
 			words.add(s);
 			break;
 		case 7:
+			cout << "Enter new number of rows    : ";
+			cin >> newHeight;
+			cout << "Enter new number of columns : ";
+			cin >> newWidth;
+			board.resizeBoard(newWidth, newHeight);
+			cout << "Board resized to " << std::to_string(newWidth) << " x " << std::to_string(newHeight) << endl;
+			break;
+		case 8:
 			return;
+			break;
+		default:
+			cout << "Invalid selection what the heck dude" << endl;
 			break;
 		}
 	}

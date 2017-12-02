@@ -43,7 +43,6 @@ bool WordList::add(string & s)
 	for (string::size_type i = 0; i < s.length(); i++)
 	{
 		s.at(i) = tolower(s.at(i));
-		cout << s << endl;
 	}
 	//uses same process as the words constructor
 	if (!has(s))
