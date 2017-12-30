@@ -13,6 +13,7 @@
 #include <algorithm>
 
 #include "../Board/Board.h"
+#include "../WordList/WordList.h"
 
 #define timeStart(); clock_t start = clock();
 #define timeStop(); clock_t end = clock(); cout << double(end - start) / CLOCKS_PER_SEC << " seconds" << endl;

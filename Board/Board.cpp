@@ -172,9 +172,28 @@ void Board::resetDice(void)
 	}
 }
 
+unsigned int Board::getShortLength(void)
+{
+	if (boardHeight == 4 && boardWidth == 4)
+	{
+		//Figured out by trial and error :(
+		return 6;
+	}
+	else if (boardHeight == 5 && boardWidth == 5)
+	{
+		return 4;
+	}
+	else
+	{
+		//CALCULATE
+		return 0;
+	}
+}
+
 //Returns copy of foundWords
 vector<string> Board::getFoundWords(void) 
 {
+	//TODO: Allocate foundWords on the heap and return a pointer instead
 	return foundWords;
 }
 
@@ -253,6 +272,10 @@ vector<string> Board::findWords(const WordList & words)
 	for (int j = 0; j < boardHeight; j++)
 		nullBoard[i][j] = false;
 
+	int progressRequired = boardHeight * boardWidth;
+	int progress;
+	float bar;
+
 	//Needs to make every possible permutation through the board and check them against the hash table
 	//There is probably a way to short circuit stupid paths but I don't know how to do that UPDATE: I DID IT
 	for (int i = 0; i < boardWidth ; i++)
@@ -261,7 +284,19 @@ vector<string> Board::findWords(const WordList & words)
 		//Need to make boardHeight * boardWidth recursive calls. since you can start from any position on the board
 		//This for loop is needed. can't use recursion for everything
 		findWordsFromPos(nullBoard, i, j, s, words);
+
+		progress = 10 * (i * boardHeight + j) / (float) progressRequired;
+
+		//Progress bar - 10 segments
+		//Percentage of current progress is 100 * (progress / progressRequired)
+		for (bar = 0; bar <= progress; bar++)
+		{
+			cout << (char) 219;
+		}
+		cout << '\r'; //return carriage
 	}
+
+	cout << endl;
 
 	//All strings found, return them
 	return foundWords;
@@ -304,18 +339,19 @@ void Board::findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, cons
 	//Check if recursive call is in the bounds of the board AND if the letter hasn't been used yet
 	//if (i >= 0 && i < boardHeight && j >= 0 && j < boardWidth && nullBoard[i][j] == false) TOO SLOW, moved this to the for loop
 
-	if (s.size() < SHORT || !words.shortCircuit(s)) //quits if going down a stupid path
+	int found = words.has(s.c_str());
+
+	if (found != -1) //Quits if going down a stupid path
 	{
-		s += board[i][j]; //add letter to current word
+		s += board[i][j]; //Add letter to current word
 		if (board[i][j] == 'q')
 			s += 'u'; //adds the bonus u attached to qs
 		//nullboard stops recursion from using a letter more than once
 		nullBoard[i][j] = true;
 
-		//If the word is in the wordList hash table, add it to the newWords list
-		if (words.has(s))
+		//If the word is in the wordList, add it to the newWords list
+		if (found == 1)
 		{
-			//cout << s << endl;
 			if (s.length() >= 3 && find(foundWords.begin(), foundWords.end(), s) == foundWords.end() )
 			{
 				//cout << s << endl;

@@ -1,12 +1,9 @@
-# Hacked up by Aaron Crandall, 2017
-# Modified by Ryan for his own uses :)
-
 # Variables
 GPP     = g++
 CFLAGS  = -g -Wall -std=c++11
 RM      = rm -f
 BINNAME = groggle
-SOURCE  = Board/*.cpp Groggle/*.cpp main.cpp
+SOURCE  = Board/*.cpp Groggle/*.cpp WordList/*.cpp main.cpp
 
 # Shell gives make a full user environment
 SHELL := /bin/bash

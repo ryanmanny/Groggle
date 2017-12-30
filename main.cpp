@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	//cleanDictionary();
+	// cleanDictionary();
 	Groggle game;
 	game.runApp();
 }

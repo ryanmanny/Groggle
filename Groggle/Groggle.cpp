@@ -46,9 +46,12 @@ void Groggle::runApp(void)
 			printBoard();
 			break;
 		case 4:
-			cout << "Type in the letters of the board in the order they appear:" << endl;
-			cin >> s;
-			board.setBoard(s);
+			cout << "Type in the letters of the board in the order they appear (type l for last board):" << endl;
+			if (s != "l")
+			{
+				cin >> s;
+				board.setBoard(s);
+			}
 			board.print();
 			board.findWords(words);
 			board.sortWords();
@@ -57,7 +60,7 @@ void Groggle::runApp(void)
 		case 5:
 			cout << "Type a word to find in the dictionary: " << endl;
 			cin >> s;
-			if (words.has(s))
+			if (words.has(s.c_str()))
 			{
 				cout << "Congrats, \"" << s << "\" is an official Groggle word!" << endl;
 			}
@@ -67,13 +70,13 @@ void Groggle::runApp(void)
 				cout << "Would you like to add it? (y/n)" << endl;
 				cin >> c;
 				if (c == 'y' || c == 'Y')
-					words.add(s);
+					words.insert(s.c_str());
 			}
 			break;
 		case 6:
 			cout << "Type your custom word:" << endl;
 			cin >> s;
-			words.add(s);
+			words.insert(s.c_str());
 			break;
 		case 7:
 			cout << "Enter new board dimension (NxN): ";
@@ -108,13 +111,27 @@ void Groggle::playGame(void)
 //THIS CODE IS ROCKIN WORKED FIRST TRY
 void cleanDictionary(void)
 {
-	ifstream infile("boggle.txt");
-	ofstream outfile("cleanBoggle.txt");
+	ifstream infile("Board/cleanBoggle2.txt");
+	ofstream outfile("Board/cleanBoggle3.txt");
 	string s;
 	while (!infile.eof())
 	{
 		infile >> s;
-		string::iterator it = find(s.begin(), s.end(), '\'');
+		string::iterator it = s.begin();
+		//string::iterator it = find(s.begin(), s.end(), '\'');
+		while (it != s.end())
+		{
+			if (*it != tolower(*it))
+			{
+				break;
+			}
+			// if (!isalpha(*it))
+			// {
+			// 	break;
+			// }
+			it++;
+		}
+
 		if (it == s.end()) //does not contain an apostrophe
 		{
 			outfile << s << endl;
