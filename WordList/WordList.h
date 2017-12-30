@@ -45,9 +45,12 @@ public:
 	WordList(const string & filename);
 	~WordList(); //DEAR GOD DEALLOCATE THE TREE
 
+	int has(const string & str) const;
 	int has(const char * str) const;
-	bool insert(Node * & root, const char * str);
+
+	bool insert(const string & str);
 	bool insert(const char * str);
+	
 	//bool shortCircuit(const string & s) const;
 	//void changeShort(const unsigned int newShort);
 private:

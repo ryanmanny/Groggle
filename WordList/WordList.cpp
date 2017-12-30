@@ -43,6 +43,11 @@ WordList::~WordList()
 
 }
 
+bool WordList::insert(const string & str)
+{
+	return insert(str.c_str());
+}
+
 //ITERATIVE NOW BECAUSE IT MAKES WAY MORE SENSE THAT WAY
 //EXCEPT WITHOUT RECURSION IT IS VERY DIFFICULT TO ACTUALLY MODIFY THE DATA STRUCTURE
 bool WordList::insert(const char * str) //Now insert doesn't modify original string
@@ -67,11 +72,15 @@ bool WordList::insert(const char * str) //Now insert doesn't modify original str
 			//Overwrite pCur with this new Node. Should propogate through the rest of the tree
 			*pCur = new Node(false); //Always assume terminator is false. This will be corrected if we are at the end
 		}
-
 	}
 	//WE ARE AT THE NULL CHARACTER - So this is a termination character, which marks a valid word
 	(*pCur)->term = true;
 	return true;
+}
+
+int WordList::has(const string & str) const
+{
+	return has(str.c_str());
 }
 
 //Returns -1 if bad path happens somewhere along the way, 0 if potential correct path, 1 if found
@@ -80,23 +89,29 @@ int WordList::has(const char * str) const
 	//Start with first letter
 	Node * pCur = pRoot.at(*str++ - 'a');
 
-	//This one can be done iteratively. Insert probably could have been too
-	while (*str != '\0')
+	//Iterative
+	//Until we get to the null character, let's go
+	while (*str != '\0' && isalpha(*str))
 	{
+		//Advance down the path of the next letter
+		pCur = pCur->child.at(*str++ - 'a');
+
+		//Check to see if that path is any good
 		if (pCur == nullptr)
 		{
 			//Path n'existe pas, return -1
 			return -1;
 		}
-		pCur = pCur->child.at(*str++ - 'a');
-	}	
+	}
+
 	//We made it to the end of the string, is it a valid word?
+	//If we are at a terminating character we should be at the end
 	if (pCur->term == true)
 	{
 		//Found
 		return 1;
 	}
-	//Potential valid path
+	//Potential valid path - not end of the string OR end of the line. EXCELLENT
 	return 0;
 }
 

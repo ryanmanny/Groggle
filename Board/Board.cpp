@@ -272,12 +272,12 @@ vector<string> Board::findWords(const WordList & words)
 	for (int j = 0; j < boardHeight; j++)
 		nullBoard[i][j] = false;
 
-	int progressRequired = boardHeight * boardWidth;
-	int progress;
-	float bar;
+	// int progressRequired = boardHeight * boardWidth;
+	// int progress;
+	// float bar;
 
-	//Needs to make every possible permutation through the board and check them against the hash table
-	//There is probably a way to short circuit stupid paths but I don't know how to do that UPDATE: I DID IT
+	//Needs to make every possible permutation through the board and check them against the 26ARY TREE
+	//There is probably a way to short circuit stupid paths but I don't know how to do that UPDATE: I DID IT UPDATE2: I DID IT AGAIN WITH BETTER DATA STRUCTURE
 	for (int i = 0; i < boardWidth ; i++)
 	for (int j = 0; j < boardHeight; j++)
 	{
@@ -285,15 +285,16 @@ vector<string> Board::findWords(const WordList & words)
 		//This for loop is needed. can't use recursion for everything
 		findWordsFromPos(nullBoard, i, j, s, words);
 
-		progress = 10 * (i * boardHeight + j) / (float) progressRequired;
+		// HERE'S THE PROGRESS BAR THAT NEVER WORKED
+		// progress = 10 * (i * boardHeight + j) / (float) progressRequired;
 
-		//Progress bar - 10 segments
-		//Percentage of current progress is 100 * (progress / progressRequired)
-		for (bar = 0; bar <= progress; bar++)
-		{
-			cout << (char) 219;
-		}
-		cout << '\r'; //return carriage
+		// //Progress bar - 10 segments
+		// //Percentage of current progress is 100 * (progress / progressRequired)
+		// for (bar = 0; bar <= progress; bar++)
+		// {
+		// 	cout << (char) 219;
+		// }
+		// cout << '\r'; //return carriage
 	}
 
 	cout << endl;
@@ -339,16 +340,11 @@ void Board::findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, cons
 	//Check if recursive call is in the bounds of the board AND if the letter hasn't been used yet
 	//if (i >= 0 && i < boardHeight && j >= 0 && j < boardWidth && nullBoard[i][j] == false) TOO SLOW, moved this to the for loop
 
-	int found = words.has(s.c_str());
+	//If length is less than 3 always continue
+	int found = (s.length() < 3 ? 0 : words.has(s.c_str()));
 
 	if (found != -1) //Quits if going down a stupid path
 	{
-		s += board[i][j]; //Add letter to current word
-		if (board[i][j] == 'q')
-			s += 'u'; //adds the bonus u attached to qs
-		//nullboard stops recursion from using a letter more than once
-		nullBoard[i][j] = true;
-
 		//If the word is in the wordList, add it to the newWords list
 		if (found == 1)
 		{
@@ -358,6 +354,12 @@ void Board::findWordsFromPos(vector<vector<bool>> & nullBoard, const int i, cons
 				foundWords.push_back(s);
 			}
 		}
+
+		s += board[i][j]; //Add letter to current word
+		if (board[i][j] == 'q')
+			s += 'u'; //adds the bonus u attached to qs
+		//nullboard stops recursion from using a letter more than once
+		nullBoard[i][j] = true;
 
 		//Recursion time - moves to all 9 surrounding letters
 		//These will all happen while the current letter is blocked off
